@@ -14,7 +14,6 @@ dependencies:
 	go get -u github.com/gogo/protobuf/proto@21df5aa0e680850681b8643f0024f92d3b09930c
 	go get -u github.com/kevinburke/go-bindata/go-bindata
 
-# Generate go files containing the all template files in []byte form
 gobindata:
 	go generate github.com/metaverse/truss/gengokit/template
 

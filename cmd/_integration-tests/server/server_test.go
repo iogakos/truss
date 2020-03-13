@@ -112,6 +112,7 @@ func TestBasicTypes(t *testing.T) {
 func TestBasicTypesWithRelSVCOutFlag(t *testing.T) {
 	svcOut := "./metaverse"
 	path := filepath.Join(basePath, "1-basic")
+
 	err := createTrussService(path, "--svcout", svcOut)
 	if err != nil {
 		t.Fatal(err)
@@ -240,6 +241,7 @@ func truss(path string, options ...string) (string, error) {
 
 	args := append(options, protofiles...)
 	args = append(args, "-v")
+
 	trussExec := exec.Command(
 		"truss",
 		args...,

@@ -2,6 +2,13 @@
 # swap
 [._]*.s[a-w][a-z]
 [._]s[a-w][a-z]
+
+# custom templates
+gengokit/*_template/
+
+# so
+*.so
+
 # session
 Session.vi
 

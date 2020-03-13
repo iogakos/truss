@@ -6,13 +6,11 @@ import (
 	"go/token"
 	"io"
 	"io/ioutil"
-	"os"
-	"path/filepath"
 	"strings"
 	"testing"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/metaverse/truss/gengokit"
 	helper "github.com/metaverse/truss/gengokit/gentesthelper"
@@ -22,10 +20,6 @@ import (
 var gopath []string
 var diff = helper.DiffStrings
 var testFormat = helper.TestFormat
-
-func init() {
-	gopath = filepath.SplitList(os.Getenv("GOPATH"))
-}
 
 func init() {
 	log.SetLevel(log.DebugLevel)

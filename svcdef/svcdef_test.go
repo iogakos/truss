@@ -46,7 +46,8 @@ type NestedTypeRequest struct {
 	B []*NestedMessageB
 	C EnumType
 }`
-	sd, err := New(map[string]io.Reader{"/tmp/notreal": strings.NewReader(caseCode)}, nil)
+	sd, err := New(
+		map[string]io.Reader{"/tmp/notreal": strings.NewReader(caseCode)}, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
