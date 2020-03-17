@@ -227,6 +227,10 @@ func TestAllTemplates(t *testing.T) {
 	}
 
 	for _, templFP := range svcdef.AssetNames() {
+		if filepath.Ext(templFP) != ".gotemplate" {
+			continue
+		}
+
 		var prev io.Reader
 
 		firstCode, err := testGenerateResponseFile(templFP, data1, prev)
