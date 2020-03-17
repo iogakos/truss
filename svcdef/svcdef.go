@@ -227,7 +227,6 @@ func Asset(p string) ([]byte, error) {
 		return template.Asset(p)
 	}
 
-	panic(">>>>>>>>>>>>>")
 	return templfiles.Asset(p)
 }
 
