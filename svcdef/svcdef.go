@@ -202,8 +202,16 @@ var (
 
 var defaultTemplPath = "../gengokit/template/template.so"
 
+func OverridesTemplatePath() bool {
+	return len(TemplatePathEnv()) > 0
+}
+
+func TemplatePathEnv() string {
+	return os.Getenv("TRUSS_TEMPL_PATH")
+}
+
 func TemplatePath() string {
-	if v := os.Getenv("TRUSS_TEMPL_PATH"); len(v) > 0 {
+	if v := TemplatePathEnv(); len(v) > 0 {
 		return v
 	}
 
@@ -211,7 +219,7 @@ func TemplatePath() string {
 }
 
 func AssetNames() []string {
-	if v := os.Getenv("TRUSS_TEMPL_PATH"); len(v) > 0 {
+	if v := TemplatePathEnv(); len(v) > 0 {
 		template := &Template{}
 		template.Load(TemplatePath())
 		return template.AssetNames()
@@ -221,7 +229,7 @@ func AssetNames() []string {
 }
 
 func Asset(p string) ([]byte, error) {
-	if v := os.Getenv("TRUSS_TEMPL_PATH"); len(v) > 0 {
+	if v := TemplatePathEnv(); len(v) > 0 {
 		template := &Template{}
 		template.Load(TemplatePath())
 		return template.Asset(p)

@@ -59,6 +59,16 @@ func generateResponseFile(templFP string, data *gengokit.Data, prevFile io.Reade
 	// Get the actual path to the file rather than the template file path
 	actualFP := templatePathToActual(templFP, data.Service.Name)
 
+	if svcdef.OverridesTemplatePath() {
+		// this is a custom template so render everything ouf of the that
+		// template's tree and ignore original implementation
+		if genCode, err = applyTemplateFromPath(templFP, data); err != nil {
+			return nil, errors.Wrapf(err, "cannot render template: %s", templFP)
+		}
+
+		goto rendered
+	}
+
 	switch templFP {
 	case handlers.ServerHandlerPath:
 		h, err := handlers.New(data.Service, prevFile)
@@ -86,6 +96,7 @@ func generateResponseFile(templFP string, data *gengokit.Data, prevFile io.Reade
 		}
 	}
 
+rendered:
 	codeBytes, err := ioutil.ReadAll(genCode)
 	if err != nil {
 		return nil, err
