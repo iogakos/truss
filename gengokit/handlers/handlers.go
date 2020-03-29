@@ -11,8 +11,8 @@ import (
 	"io"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/metaverse/truss/gengokit"
 	"github.com/metaverse/truss/gengokit/handlers/templates"
@@ -23,7 +23,7 @@ import (
 // it will not be defined in the service definition but is required
 const ignoredFunc = "NewService"
 
-// ServerHadlerPath is the relative path to the server handler template file
+// ServerHandlerPath is the relative path to the server handler template file
 const ServerHandlerPath = "handlers/handlers.gotemplate"
 
 // New returns a truss.Renderable capable of updating server handlers.
