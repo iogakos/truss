@@ -11,8 +11,8 @@ import (
 
 	"golang.org/x/tools/go/packages"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 	flag "github.com/spf13/pflag"
 
 	"github.com/metaverse/truss/truss"
@@ -178,8 +178,7 @@ func parseInput() (*truss.Config, error) {
 	svcDirName := svcName + "-service"
 	log.WithField("svcDirName", svcDirName).Debug()
 
-	svcPath := filepath.Join(filepath.Dir(cfg.DefPaths[0]), svcDirName)
-
+	var svcPath string
 	if *svcPackageFlag != "" {
 		svcOut := *svcPackageFlag
 		log.WithField("svcPackageFlag", svcOut).Debug()
@@ -198,6 +197,8 @@ func parseInput() (*truss.Config, error) {
 		if seperator {
 			svcPath = filepath.Join(svcPath, svcDirName)
 		}
+	} else {
+		svcPath = filepath.Join(filepath.Dir(cfg.DefPaths[0]), svcDirName)
 	}
 
 	log.WithField("svcPath", svcPath).Debug()
@@ -211,6 +212,11 @@ func parseInput() (*truss.Config, error) {
 	p, err = packages.Load(nil, svcPath)
 	if err != nil || len(p) == 0 {
 		return nil, errors.Wrap(err, "generated service not found in importable go package")
+	}
+
+	if len(p[0].Errors) > 0 {
+		err := fmt.Errorf("package load error: %v, path: %s ", p[0].Errors, svcPath)
+		log.WithField("package load errors", err).Warn()
 	}
 
 	log.WithField("Service Packages", p).Info()

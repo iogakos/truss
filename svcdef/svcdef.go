@@ -22,11 +22,13 @@ import (
 	"go/parser"
 	"go/token"
 	"io"
+	"os"
 	"reflect"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
+	templfiles "github.com/metaverse/truss/gengokit/template"
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 )
 
 // Svcdef is the top-level struct for the definition of a service.
@@ -197,6 +199,36 @@ func (le LocationError) Location() string {
 var (
 	oneofs = map[string][]*Field{}
 )
+
+var defaultTemplPath = "../gengokit/template/template.so"
+
+func TemplatePath() string {
+	if v := os.Getenv("TRUSS_TEMPL_PATH"); len(v) > 0 {
+		return v
+	}
+
+	return defaultTemplPath
+}
+
+func AssetNames() []string {
+	if v := os.Getenv("TRUSS_TEMPL_PATH"); len(v) > 0 {
+		template := &Template{}
+		template.Load(TemplatePath())
+		return template.AssetNames()
+	}
+
+	return templfiles.AssetNames()
+}
+
+func Asset(p string) ([]byte, error) {
+	if v := os.Getenv("TRUSS_TEMPL_PATH"); len(v) > 0 {
+		template := &Template{}
+		template.Load(TemplatePath())
+		return template.Asset(p)
+	}
+
+	return templfiles.Asset(p)
+}
 
 // New creates a Svcdef by parsing the provided Go and Protobuf source files to
 // derive type information, gRPC service data, and HTTP annotations.

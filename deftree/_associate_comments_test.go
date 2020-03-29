@@ -55,7 +55,7 @@ func TestCommentedImport(t *testing.T) {
 		syntax = "proto3";
 
 		// This comment should not cause any problems
-		
+
 		// This comment should not cause any problems
 		package general;
 

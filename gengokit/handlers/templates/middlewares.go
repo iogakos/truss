@@ -34,6 +34,7 @@ func WrapEndpoints(in svc.Endpoints) svc.Endpoints {
 	return in
 }
 
+// WrapService ...
 func WrapService(in pb.{{.Service.Name}}Server) pb.{{.Service.Name}}Server {
 	return in
 }

@@ -6,14 +6,14 @@ import (
 	"go/format"
 	"io"
 	"io/ioutil"
+	"path/filepath"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/metaverse/truss/gengokit"
 	"github.com/metaverse/truss/gengokit/handlers"
-	templFiles "github.com/metaverse/truss/gengokit/template"
 
 	"github.com/metaverse/truss/svcdef"
 )
@@ -31,10 +31,11 @@ func GenerateGokit(sd *svcdef.Svcdef, conf gengokit.Config) (map[string]io.Reade
 
 	// Remove the suffix "-service" since it's added back in by templatePathToActual
 	svcname := strings.ToLower(sd.Service.Name)
-	for _, templPath := range templFiles.AssetNames() {
+	for _, templPath := range svcdef.AssetNames() {
 		// Re-derive the actual path for this file based on the service output
 		// path provided by the truss main.go
 		actualPath := templatePathToActual(templPath, svcname)
+
 		file, err := generateResponseFile(templPath, data, conf.PreviousFiles[actualPath])
 		if err != nil {
 			return nil, errors.Wrap(err, "cannot render template")
@@ -90,6 +91,11 @@ func generateResponseFile(templFP string, data *gengokit.Data, prevFile io.Reade
 		return nil, err
 	}
 
+	// skip formatting non-Go files
+	if filepath.Ext(templFP) != ".gotemplate" {
+		return bytes.NewReader(codeBytes), nil
+	}
+
 	// ignore error as we want to write the code either way to inspect after
 	// writing to disk
 	formattedCode := formatCode(codeBytes)
@@ -112,7 +118,7 @@ func templatePathToActual(templFilePath, svcName string) string {
 
 // applyTemplateFromPath calls applyTemplate with the template at templFilePath
 func applyTemplateFromPath(templFP string, data *gengokit.Data) (io.Reader, error) {
-	templBytes, err := templFiles.Asset(templFP)
+	templBytes, err := svcdef.Asset(templFP)
 	if err != nil {
 		return nil, errors.Wrapf(err, "unable to find template file: %v", templFP)
 	}

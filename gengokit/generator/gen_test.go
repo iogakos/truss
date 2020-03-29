@@ -12,7 +12,6 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/metaverse/truss/gengokit"
-	templateFileAssets "github.com/metaverse/truss/gengokit/template"
 	"github.com/metaverse/truss/svcdef"
 
 	"github.com/metaverse/truss/gengokit/gentesthelper"
@@ -227,7 +226,11 @@ func TestAllTemplates(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	for _, templFP := range templateFileAssets.AssetNames() {
+	for _, templFP := range svcdef.AssetNames() {
+		if filepath.Ext(templFP) != ".gotemplate" {
+			continue
+		}
+
 		var prev io.Reader
 
 		firstCode, err := testGenerateResponseFile(templFP, data1, prev)
