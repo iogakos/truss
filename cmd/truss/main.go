@@ -369,6 +369,9 @@ func readPreviousGeneration(serviceDir string) (map[string]io.Reader, error) {
 
 	addFileToFiles := func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
+			if info.Name() == ".git" {
+				return filepath.SkipDir
+			}
 			return nil
 		}
 
