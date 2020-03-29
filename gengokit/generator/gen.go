@@ -60,7 +60,7 @@ func generateResponseFile(templFP string, data *gengokit.Data, prevFile io.Reade
 	actualFP := templatePathToActual(templFP, data.Service.Name)
 
 	if svcdef.OverridesTemplatePath() {
-		// this is a custom template so render everything ouf of the that
+		// this is a custom template so render everything ouf of that
 		// template's tree and ignore original implementation
 		if genCode, err = applyTemplateFromPath(templFP, data); err != nil {
 			return nil, errors.Wrapf(err, "cannot render template: %s", templFP)
