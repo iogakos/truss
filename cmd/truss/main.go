@@ -369,10 +369,14 @@ func readPreviousGeneration(serviceDir string) (map[string]io.Reader, error) {
 
 	addFileToFiles := func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
-			if info.Name() == ".git" {
+			switch info.Name() {
+			case ".git":
 				return filepath.SkipDir
+			case "vendor":
+				return filepath.SkipDir
+			default:
+				return nil
 			}
-			return nil
 		}
 
 		file, ioErr := os.Open(path)
