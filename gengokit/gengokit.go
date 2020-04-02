@@ -29,8 +29,11 @@ type Config struct {
 // FuncMap contains a series of utility functions to be passed into
 // templates and used within those templates.
 var FuncMap = template.FuncMap{
-	"ToLower": strings.ToLower,
-	"GoName":  generatego.CamelCase,
+	"GoName":   generatego.CamelCase,
+	"ToLower":  strings.ToLower,
+	"ToUpper":  strings.ToUpper,
+	"Title":    strings.Title,
+	"Contains": strings.Contains,
 }
 
 // Data is passed to templates as the executing struct; its fields
